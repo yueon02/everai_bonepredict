@@ -1,0 +1,39 @@
+<nav class="navbar">
+    <ul>
+        <li><a href="{{ url_for('main.home') }}">Home</a></li>
+
+        <!-- Upload & Analyze -->
+        <li class="dropdown">
+            <a href="#">Upload & Analyze ▾</a>
+            <div class="dropdown-content">
+                <div class="dropdown-sub">
+                    <a href="#">Type of Radiological Images ▸</a>
+                    <div class="dropdown-content sub-menu">
+                        <a href="{{ url_for('main.index') }}">Radiograph</a>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- Confusion Matrix -->
+        <li class="dropdown">
+            <a href="#">Model Performance ▾</a>
+            <div class="dropdown-content">
+                <a href="{{ url_for('main.model_performance') }}">Skull Radiograph</a>
+            </div>
+        </li>
+
+        <!-- Direct Links -->
+        <li><a href="{{ url_for('main.research') }}">Research & Publications</a></li>
+        <li><a href="{{ url_for('main.collaborate') }}">Collaborate with Us</a></li>
+
+        <!-- Logout Icon -->
+        <li class="logout-btn-container">
+            <form action="{{ url_for('auth.logout') }}" method="get">
+                <button type="submit" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
+        </li>
+    </ul>
+</nav>
