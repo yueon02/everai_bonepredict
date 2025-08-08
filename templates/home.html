@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home - ForensRadioAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForensRadioAI - AI-Powered Forensic Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        /* Advanced glassmorphism */
+        .glass-ultra {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-card-advanced {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 
+                0 12px 40px rgba(31, 38, 135, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card-advanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.8s;
+        }
+        
+        .glass-card-advanced:hover::before {
+            left: 100%;
+        }
+        
+        /* Complex animations */
+        .floating-complex {
+            animation: float-complex 8s ease-in-out infinite;
+        }
+        
+        @keyframes float-complex {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(1deg); }
+            50% { transform: translateY(-30px) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(-1deg); }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6), 0 0 60px rgba(59, 130, 246, 0.3); }
+        }
+        
+        /* Advanced gradient text */
+        .gradient-text-advanced {
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 30%, #c7d2fe 60%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 4s ease-in-out infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(20deg); }
+        }
+        
+        /* Interactive hover effects */
+        .hover-transform {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .hover-transform:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(31, 38, 135, 0.5);
+        }
+        
+        /* Feature icons with advanced styling */
+        .feature-icon-advanced {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+            box-shadow: 
+                0 8px 25px rgba(59, 130, 246, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-icon-advanced::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+        
+        .feature-icon-advanced:hover::before {
+            animation: shine 0.6s ease-in-out;
+            opacity: 1;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        /* Navigation enhancements */
+        .nav-glass {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(31, 38, 135, 0.3);
+        }
+        
+        /* Scroll reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Loading animation */
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+        
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: loading-bounce 1.4s ease-in-out infinite both;
+        }
+        
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes loading-bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        /* Morphing shapes */
+        .morph-shape {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            border-radius: 50%;
+            animation: morph 15s ease-in-out infinite;
+        }
+        
+        @keyframes morph {
+            0%, 100% { border-radius: 50% 50% 50% 50%; transform: rotate(0deg); }
+            25% { border-radius: 60% 40% 30% 70%; transform: rotate(90deg); }
+            50% { border-radius: 30% 70% 70% 30%; transform: rotate(180deg); }
+            75% { border-radius: 70% 30% 50% 50%; transform: rotate(270deg); }
+        }
+</style>
+<body>
+  {% include 'navbar.html' %}
+        <!-- Hero Section with Advanced Effects -->
+        <section class="min-h-screen flex items-center justify-center px-6 relative">
+            <div class="max-w-6xl mx-auto text-center relative z-10">
+                <div class="glass-ultra rounded-3xl p-12 mb-8 hover-transform">
+                    <h1 class="text-4xl md:text-6xl font-black gradient-text-advanced mb-6 leading-tight">
+                        Welcome to<br>
+                        <span class="text-5xl md:text-7xl">ForensRadioAI</span>
+                    </h1>
+                    <div class="max-w-4xl mx-auto mb-8">
+                        <p class="text-lg md:text-xl text-blue-100 mb-4 leading-relaxed font-light">
+                            ForensRadioAI is an <span class="font-semibold text-white">AI-powered software platform</span> built to revolutionize forensic anthropology and radiology identification through radiographic imaging.
+                        </p>
+                        <p class="text-base md:text-lg text-blue-200 leading-relaxed">
+                            It combines the precision of radiology with the analytical strength of artificial intelligence, delivering <span class="font-semibold text-white">rapid, reproducible, and population-specific</span> forensic insights.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What is ForensRadioAI Section -->
+        <section class="py-16 px-6 reveal">
+            <div class="max-w-6xl mx-auto">
+                <div class="glass-card-advanced rounded-3xl p-10 hover-transform">
+                    <div class="flex items-center mb-8 justify-center">
+                        <div class="feature-icon-advanced rounded-full p-4 mr-4">
+                            <div class="text-3xl">🔍</div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-black gradient-text-advanced">What is ForensRadioAI?</h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <p class="text-xl text-blue-100 leading-relaxed mb-8">
+                                ForensRadioAI is a software that <span class="font-semibold text-white">automates the interpretation</span> of skeletal radiographs such as radiograph and CT scans to estimate biological sex, age-at-death, population affinity, stature, trauma and other osteological traits.
+                            </p>
+                            <p class="text-lg text-blue-200 leading-relaxed">
+                                Built using <span class="font-semibold text-white">advanced machine learning algorithms</span> and trained on validated datasets, the platform is designed to assist forensic anthropologists, radiologists, and researchers in solving complex human identification cases.
+                            </p>
+                        </div>
+                        <div class="glass-card-advanced rounded-2xl p-8 text-center">
+                            <div class="text-6xl mb-4">🧠</div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">AI-Powered Analysis</h3>
+                            <div class="flex justify-around text-center">
+                                <div>
+                                    <div class="text-3xl font-bold text-blue-300">80.0%</div>
+                                    <div class="text-sm text-blue-200">Accuracy</div>
+                                </div>
+                                <div>
+                                    <div class="text-3xl font-bold text-green-300">< 5min</div>
+                                    <div class="text-sm text-blue-200">Analysis Time</div>
+                                </div>
+                                <div>
+                                    <div class="text-3xl font-bold text-purple-300">24/7</div>
+                                    <div class="text-sm text-blue-200">Availability</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Key Features Section -->
+        <section id="features" class="py-16 px-6 reveal">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="feature-icon-advanced rounded-full p-4 mr-4">
+                            <div class="text-3xl">⚙️</div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-black gradient-text-advanced">Key Features</h2>
+                    </div>
+                    <p class="text-lg text-blue-200 max-w-3xl mx-auto">
+                        Discover the powerful capabilities that make ForensRadioAI the leading solution in forensic analysis
+                    </p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="glass-card-advanced rounded-2xl p-8 hover-transform">
+                        <div class="flex items-start mb-6">
+                            <div class="text-3xl p-3 mr-4 rounded-xl flex items-center justify-center">🤖</div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-4 text-white">AI-Assisted Interpretation</h3>
+                                <p class="text-lg text-blue-100 leading-relaxed mb-6">
+                                    Leverages advanced machine learning algorithms for automated interpretation of radiological images for accurate forensic biological profiling, which improve analysis speed.
+                                </p>
+                                <div class="flex flex-wrap gap-3">
+                                    <span class="glass-card-advanced px-4 py-2 rounded-full text-sm font-semibold">Machine Learning</span>
+                                    <span class="glass-card-advanced px-4 py-2 rounded-full text-sm font-semibold">Deep Neural Networks</span>
+                                    <span class="glass-card-advanced px-4 py-2 rounded-full text-sm font-semibold">Computer Vision</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="glass-card-advanced rounded-2xl p-8 hover-transform">
+                        <div class="flex items-start mb-6">
+                            <div class="text-4xl p-3 mr-4 rounded-xl flex items-center justify-center">🎯</div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-4 text-white">Versatile Applications</h3>
+                                <p class="text-lg text-blue-100 leading-relaxed mb-6">
+                                    Supports biological profiling for biological sex, age-at-death, population affinity, stature, trauma and other osteological traits for forensic application.
+                                </p>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="glass-card-advanced p-3 rounded-xl text-center">
+                                        <div class="text-2xl mb-2 ">👤</div>
+                                        <div class="text-sm font-semibold">Sex Estimation</div>
+                                    </div>
+                                    <div class="glass-card-advanced p-3 rounded-xl text-center">
+                                        <div class="text-2xl mb-2">📏</div>
+                                        <div class="text-sm font-semibold">Stature Analysis</div>
+                                    </div>
+                                    <div class="glass-card-advanced p-3 rounded-xl text-center">
+                                        <div class="text-2xl mb-2">🕐</div>
+                                        <div class="text-sm font-semibold">Age Estimation</div>
+                                    </div>
+                                    <div class="glass-card-advanced p-3 rounded-xl text-center">
+                                        <div class="text-2xl mb-2">🌍</div>
+                                        <div class="text-sm font-semibold">Population Affinity</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="glass-card-advanced rounded-2xl p-8 hover-transform">
+                        <div class="flex items-start mb-6">
+                            <div class="text-3xl p-3 mr-4 rounded-xl flex items-center justify-center">💻</div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-4 text-white">User-Friendly Interface</h3>
+                                <p class="text-lg text-blue-100 leading-relaxed mb-6">
+                                    Upload radiological images, input basic metadata, and receive comprehensive reports in minutes.
+                                </p>
+                                <div class="flex items-center space-x-4 text-sm">
+                                    <div class="flex items-center space-x-2 text-blue-200">
+                                        <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                                        <span>Drag & Drop Upload</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 text-blue-200">
+                                        <div class="w-3 h-3 bg-blue-400 rounded-full"></div>
+                                        <span>Real-time Processing</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 text-blue-200">
+                                        <div class="w-3 h-3 bg-purple-400 rounded-full"></div>
+                                        <span>Reports</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="glass-card-advanced rounded-2xl p-8 hover-transform">
+                        <div class="flex items-start mb-6">
+                                <div class="text-3xl p-3 mr-4 rounded-xl flex items-center justify-center">🔒</div>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-4 text-white">Secure & Confidential</h3>
+                                <p class="text-lg text-blue-100 leading-relaxed mb-6">
+                                    Built with data privacy and professional ethics in mind, ensuring your forensic data remains protected with enterprise-grade security.
+                                </p>
+                                <div class="grid grid-cols-3 gap-3 text-center">
+                                    <div class="glass-card-advanced p-3 rounded-xl">
+                                        <div class="text-xl mb-1">🛡️</div>
+                                        <div class="text-xs font-semibold">End-to-End Encryption</div>
+                                    </div>
+                                    <div class="glass-card-advanced p-3 rounded-xl">
+                                        <div class="text-xl mb-1">🔐</div>
+                                        <div class="text-xs font-semibold">HIPAA Compliant</div>
+                                    </div>
+                                    <div class="glass-card-advanced p-3 rounded-xl">
+                                        <div class="text-xl mb-1">📋</div>
+                                        <div class="text-xs font-semibold">Audit Trails</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Use Cases Section -->
+        <section id="use-cases" class="py-16 px-6 reveal">
+            <div class="max-w-6xl mx-auto">
+                <div class="glass-card-advanced rounded-3xl p-10 hover-transform">
+                    <div class="flex items-center mb-10 justify-center">
+                        <div class="feature-icon-advanced rounded-full p-4 mr-4">
+                            <div class="text-3xl">🔬</div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-black gradient-text-advanced">Use Cases</h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="glass-card-advanced p-8 rounded-2xl hover-transform">
+                            <div class="text-4xl mb-4">⚖️</div>
+                            <h3 class="text-xl font-bold mb-4 text-white">Forensic Casework</h3>
+                            <p class="text-blue-100 text-sm leading-relaxed">Human Identification and forensic casework analysis</p>
+                        </div>
+                        <div class="glass-card-advanced p-8 rounded-2xl hover-transform">
+                            <div class="text-4xl mb-4">📸</div>
+                            <h3 class="text-xl font-bold mb-4 text-white">Radiographic Reassessment</h3>
+                            <p class="text-blue-100 text-sm leading-relaxed">Reassessment of unidentified remains using advanced imaging</p>
+                        </div>
+                        <div class="glass-card-advanced p-8 rounded-2xl hover-transform">
+                            <div class="text-4xl mb-4">🚨</div>
+                            <h3 class="text-xl font-bold mb-4 text-white">Mass Disaster Response</h3>
+                            <p class="text-blue-100 text-sm leading-relaxed">Victim identification in mass casualty events</p>
+                        </div>
+                        <div class="glass-card-advanced p-8 rounded-2xl hover-transform">
+                            <div class="text-4xl mb-4">🏛️</div>
+                            <h3 class="text-xl font-bold mb-4 text-white">Bioarchaeological Research</h3>
+                            <p class="text-blue-100 text-sm leading-relaxed">Historical population studies and archaeological analysis</p>
+                        </div>
+                        <div class="glass-card-advanced p-8 rounded-2xl hover-transform md:col-span-2 lg:col-span-2">
+                            <div class="text-4xl mb-4">🎓</div>
+                            <h3 class="text-xl font-bold mb-4 text-white">Academic Research & Teaching</h3>
+                            <p class="text-blue-100 text-sm leading-relaxed">Educational applications in forensic radiology and anthropology programs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Vision Section -->
+        <section id="vision" class="py-16 px-6 reveal">
+            <div class="max-w-6xl mx-auto">
+                <div class="glass-card-advanced rounded-3xl p-10 text-center hover-transform">
+                    <div class="flex items-center justify-center mb-8">
+                        <div class="feature-icon-advanced rounded-full p-4 mr-4">
+                            <div class="text-3xl">💡</div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-black gradient-text-advanced">Our Vision</h2>
+                    </div>
+                    <div class="max-w-4xl mx-auto">
+                        <p class="text-xl md:text-2xl text-blue-100 leading-relaxed mb-6 font-light">
+                            <strong class="text-white font-bold">ForensRadioAI</strong> bridges the gap between radiographic imaging and forensic anthropology.
+                        </p>
+                        <p class="text-lg md:text-xl text-blue-200 leading-relaxed mb-8">
+                            By integrating <strong class="text-white font-semibold">deep learning</strong> with <strong class="text-white font-semibold">osteological science</strong>, we empower professionals with tools that are faster, more accurate, and more reproducible than ever before.
+                        </p>
+                        <div class="grid md:grid-cols-3 gap-8 mt-12">
+                            <div class="glass-card-advanced p-8 rounded-2xl">
+                                <div class="text-4xl mb-4">⚡</div>
+                                <h3 class="text-xl font-bold mb-2 text-white">Faster</h3>
+                                <p class="text-blue-200 text-sm">Reduce analysis time from hours to minutes</p>
+                            </div>
+                            <div class="glass-card-advanced p-8 rounded-2xl">
+                                <div class="text-4xl mb-4">🎯</div>
+                                <h3 class="text-xl font-bold mb-2 text-white">More Accurate</h3>
+                                <p class="text-blue-200 text-sm">AI-powered precision exceeding human capabilities</p>
+                            </div>
+                            <div class="glass-card-advanced p-8 rounded-2xl">
+                                <div class="text-4xl mb-4">🔄</div>
+                                <h3 class="text-xl font-bold mb-2 text-white">Reproducible</h3>
+                                <p class="text-blue-200 text-sm">Consistent results across different operators</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Footer -->
+        <footer class="py-20 px-6 mt-24">
+            <div class="max-w-7xl mx-auto">
+                <div class="border-t border-white border-opacity-20 pt-8 text-center">
+                    <p class="text-blue-300">© 2025 ForensRadioAI. All rights reserved. | Advancing forensic science through artificial intelligence.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+
+    // Scroll reveal animation
+            function revealOnScroll() {
+                const reveals = document.querySelectorAll('.reveal');
+                reveals.forEach(reveal => {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
+                    }
+                });
+            }
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Initialize
+            document.addEventListener('DOMContentLoaded', function() {
+                createParticles();
+                revealOnScroll();
+            });
+
+            window.addEventListener('scroll', revealOnScroll);
+    </script>

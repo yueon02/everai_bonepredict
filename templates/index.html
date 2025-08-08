@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ForensRadioAI - AI-Powered Skeletal Sex Estimation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="header">
+            <h1 id="logo">ForensRadioAI</h1>
+            <p>AI-Powered Skeletal Sex Estimation</p>
+        </div>
+
+        <!-- Enhanced Error Display -->
+        <div class="error-message" id="errorDisplay" style="display:none;">
+            <div class="error-header">
+                <span class="error-icon">⚠️</span>
+                <strong id="errorTitle" class="error-title"></strong>
+            </div>
+            <div id="errorHint" class="error-hint"></div>
+            <button class="error-close" onclick="hideError()">×</button>
+        </div>
+
+        <div class="main-content">
+            <div class="analysis-section" id="analysisSection">
+                <!-- Upload Sections -->
+                <div class="upload-container">
+                    <!-- AP View -->
+                    <div class="upload-section">
+                        <h2>AP View X-ray</h2>
+                        <div class="upload-area" id="uploadAreaAP">
+                            <div class="upload-content">
+                                <div class="upload-icon">📁</div>
+                                <p class="upload-desc">Drop your AP view X-ray here<br>or click to browse your files<br><br>
+                                • Maximum 1 image<br>• PNG, JPG, JPEG</p>
+                                <div class="upload-btn-group">
+                                    <button class="upload-btn" onclick="document.getElementById('fileInputAP').click(); event.stopPropagation()">Choose File</button>
+                                    <button class="sample-btn" onclick="selectSample('ap'); event.stopPropagation();">Select Sample Image</button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="file" id="fileInputAP" name="xray_ap" class="file-input" accept="image/*">
+                        <div class="preview-container" id="previewAP"></div>
+                        <div style="text-align:center;">
+                            <button class="remove-btn" id="removeAPBtn" style="display:none;" onclick="removeImages('ap')">Remove Image</button>
+                        </div>
+                    </div>
+
+                    <!-- Lateral View -->
+                    <div class="upload-section">
+                        <h2>Lateral View X-rays</h2>
+                        <div class="upload-area" id="uploadAreaLAT">
+                            <div class="upload-content">
+                                <div class="upload-icon">📁</div>
+                                <p class="upload-desc">Drop your Lateral view X-ray here<br>or click to browse your files<br><br>
+                                • Maximum 2 images<br>• PNG, JPG, JPEG</p>
+                                <button class="upload-btn" onclick="document.getElementById('fileInputLAT1').click(); event.stopPropagation()">Choose File 1</button>
+                                <button class="upload-btn" onclick="document.getElementById('fileInputLAT2').click(); event.stopPropagation()">Choose File 2</button>
+                                <button class="sample-btn" onclick="selectSample('lat'); event.stopPropagation();">Select Sample Images</button>
+                            </div>
+                        </div>
+                        <input type="file" id="fileInputLAT1" name="xray_lat_1" class="file-input" accept="image/*">
+                        <input type="file" id="fileInputLAT2" name="xray_lat_2" class="file-input" accept="image/*">
+                        <div class="preview-container" id="previewLAT"></div>
+                        <div style="text-align:center;">
+                            <button class="remove-btn" id="removeLATBtn" style="display:none;" onclick="removeImages('lat')">Remove Image(s)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analyze Button / Loader -->
+                <div class="analyze-btn-container">
+                    <button class="analyze-btn" id="analyzeBtn">🔍 Analyze Images</button>
+                    <div id="loadingSpinner" style="display:none; text-align:center; margin-top:10px;">
+                        <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:#007bff;"></i>
+                        <p style="color:white;">Analyzing, please wait...</p>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section" id="resultsSection" style="display:none;">
+                    <div class="results-card">
+                        <div class="results-header-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2 class="results-title">Result</h2>
+                        <p class="results-subtitle">Radiograph</p>
+
+                        <!-- Main Gender Estimation -->
+                        <div class="gender-estimation">
+                            <h3>Sex Estimation</h3>
+                            <div id="overallGender" class="gender-text">--</div>
+                            <p id="overallConfidence" class="confidence-text">Overall Probability: --%</p>
+                        </div>
+
+                        <!-- AP & Lateral View Cards -->
+                        <div class="view-results">
+                            <div class="view-card" id="apResultBox" style="display:none;">
+                                <div class="view-header">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>AP View Analysis</span>
+                                </div>
+                                <div class="view-probability">
+                                    Probability <span id="apConfidenceValue">--%</span>
+                                </div>
+                                <div class="view-bar">
+                                    <div class="view-bar-fill" id="apConfidenceFill"></div>
+                                </div>
+                            </div>
+
+                            <div class="view-card" id="latResultBox" style="display:none;">
+                                <div class="view-header">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Lateral View Analysis</span>
+                                </div>
+                                <div class="view-probability">
+                                    Probability <span id="latConfidenceValue">--%</span>
+                                </div>
+                                <div class="view-bar">
+                                    <div class="view-bar-fill" id="latConfidenceFill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Global Action Buttons -->
+                <div class="action-buttons-container" id="globalActions" style="display:none;">
+                    <button class="btn-purple" id="analyzeAgainBtn">🔄 Analyze Again</button>
+                    <button class="btn-blue" id="uploadNewBtn">📤 Upload New Images</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let apFile = null, latFile1 = null, latFile2 = null;
+
+        // Error handling functions
+        function showError(title, hint = "") {
+            const errorDisplay = document.getElementById('errorDisplay');
+            document.getElementById('errorTitle').textContent = title;
+            document.getElementById('errorHint').textContent = hint;
+            errorDisplay.style.display = 'block';
+            
+            // Scroll to error message smoothly
+            errorDisplay.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' // Centers the error in the viewport
+            });
+        }
+
+        function hideError() {
+            document.getElementById('errorDisplay').style.display = 'none';
+        }
+
+        function updatePreview(containerId, files) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            // Check file types
+            const invalidFiles = files.filter(file => {
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                return !validTypes.includes(file.type);
+            });
+            
+            if (invalidFiles.length > 0) {
+                showError("Invalid File Type", "Please upload only JPG, JPEG, or PNG images");
+                return;
+            }
+            
+            files.forEach(file => {
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showError("File Too Large", "Maximum file size is 5MB");
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    container.innerHTML += `<img src="${ev.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            if (containerId === 'previewAP') {
+                document.getElementById('removeAPBtn').style.display = files.length ? 'inline-block' : 'none';
+            } else if (containerId === 'previewLAT') {
+                document.getElementById('removeLATBtn').style.display = files.length ? 'inline-block' : 'none';
+            }
+        }
+
+        function selectSample(type) {
+            if (type === 'ap') {
+                fetch('/static/samples/ap_sample.jpg').then(res => res.blob()).then(blob => {
+                    apFile = new File([blob], 'ap_sample.jpg', {type: blob.type});
+                    updatePreview('previewAP', [apFile]);
+                }).catch(err => {
+                    showError("Sample Load Failed", "Could not load sample image");
+                });
+            } else if (type === 'lat') {
+                Promise.all([
+                    fetch('/static/samples/lat_sample1.jpg').then(res => res.blob()),
+                    fetch('/static/samples/lat_sample2.jpg').then(res => res.blob())
+                ]).then(([b1, b2]) => {
+                    latFile1 = new File([b1], 'lat_sample1.jpg', {type: b1.type});
+                    latFile2 = new File([b2], 'lat_sample2.jpg', {type: b2.type});
+                    updatePreview('previewLAT', [latFile1, latFile2]);
+                }).catch(err => {
+                    showError("Sample Load Failed", "Could not load sample images");
+                });
+            }
+        }
+
+        function removeImages(type) {
+            if (type === 'ap') {
+                apFile = null;
+                document.getElementById('fileInputAP').value = '';
+                document.getElementById('previewAP').innerHTML = '';
+                document.getElementById('removeAPBtn').style.display = 'none';
+            } else {
+                latFile1 = null;
+                latFile2 = null;
+                document.getElementById('fileInputLAT1').value = '';
+                document.getElementById('fileInputLAT2').value = '';
+                document.getElementById('previewLAT').innerHTML = '';
+                document.getElementById('removeLATBtn').style.display = 'none';
+            }
+            hideError();
+        }
+
+        // File input event listeners with error handling
+        document.getElementById('fileInputAP').addEventListener('change', e => { 
+            if (!e.target.files.length) return;
+            apFile = e.target.files[0];
+            updatePreview('previewAP', apFile ? [apFile] : []);
+        });
+
+        document.getElementById('fileInputLAT1').addEventListener('change', e => { 
+            if (!e.target.files.length) return;
+            latFile1 = e.target.files[0];
+            updatePreview('previewLAT', [latFile1, latFile2].filter(Boolean));
+        });
+
+        document.getElementById('fileInputLAT2').addEventListener('change', e => { 
+            if (!e.target.files.length) return;
+            latFile2 = e.target.files[0];
+            updatePreview('previewLAT', [latFile1, latFile2].filter(Boolean));
+        });
+
+        // === Drag & Drop Support ===
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(areaId) {
+            document.getElementById(areaId).classList.add('upload-area-hover');
+        }
+
+        function unhighlight(areaId) {
+            document.getElementById(areaId).classList.remove('upload-area-hover');
+        }
+
+        function handleDropAP(e) {
+            preventDefaults(e);
+            unhighlight('uploadAreaAP');
+            const files = Array.from(e.dataTransfer.files);
+            if (files.length > 1) {
+                showError("Too Many Files", "Only one AP image allowed.");
+                return;
+            }
+            apFile = files[0];
+            updatePreview('previewAP', apFile ? [apFile] : []);
+        }
+
+        function handleDropLAT(e) {
+            preventDefaults(e);
+            unhighlight('uploadAreaLAT');
+            const files = Array.from(e.dataTransfer.files);
+            if (files.length > 2) {
+                showError("Too Many Files", "Maximum two Lateral images allowed.");
+                return;
+            }
+            latFile1 = files[0] || null;
+            latFile2 = files[1] || null;
+            updatePreview('previewLAT', [latFile1, latFile2].filter(Boolean));
+        }
+
+        // Add drag/drop listeners for AP
+        const apArea = document.getElementById('uploadAreaAP');
+        ['dragenter', 'dragover'].forEach(ev => apArea.addEventListener(ev, e => { preventDefaults(e); highlight('uploadAreaAP'); }));
+        ['dragleave', 'drop'].forEach(ev => apArea.addEventListener(ev, e => { preventDefaults(e); unhighlight('uploadAreaAP'); }));
+        apArea.addEventListener('drop', handleDropAP);
+
+        // Add drag/drop listeners for LAT
+        const latArea = document.getElementById('uploadAreaLAT');
+        ['dragenter', 'dragover'].forEach(ev => latArea.addEventListener(ev, e => { preventDefaults(e); highlight('uploadAreaLAT'); }));
+        ['dragleave', 'drop'].forEach(ev => latArea.addEventListener(ev, e => { preventDefaults(e); unhighlight('uploadAreaLAT'); }));
+        latArea.addEventListener('drop', handleDropLAT);
+
+        async function runAnalysis() {
+            if (!apFile && !latFile1 && !latFile2) {
+                showError("No Images Uploaded", "Please upload at least one X-ray image to analyze");
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('analyzeBtn').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('globalActions').style.display = 'none';
+            hideError();
+
+            const formData = new FormData();
+            if (apFile) formData.append('xray_ap', apFile);
+            if (latFile1) formData.append('xray_lat_1', latFile1);
+            if (latFile2) formData.append('xray_lat_2', latFile2);
+
+            try {
+                const res = await fetch('/analyze', { method: 'POST', body: formData });
+                
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                
+                const data = await res.json();
+
+                console.log("API Response:", data);
+
+                // Hide loading spinner
+                document.getElementById('loadingSpinner').style.display = 'none';
+                
+                if (data.success) {
+                    // Show results section and buttons
+                    document.getElementById('resultsSection').style.display = 'block';
+                    document.getElementById('globalActions').style.display = 'flex';
+                    
+                    // Reset previous results
+                    document.getElementById('apResultBox').style.display = 'none';
+                    document.getElementById('latResultBox').style.display = 'none';
+                    
+                    // Process AP results if available
+                    if (data.AP) {
+                        document.getElementById('apResultBox').style.display = 'block';
+                        document.getElementById('apConfidenceValue').textContent = `${data.AP.confidence}%`;
+                        document.getElementById('apConfidenceFill').style.width = `${data.AP.confidence}%`;
+                        
+                        document.getElementById('overallGender').textContent = data.AP.gender;
+                        document.getElementById('overallConfidence').textContent = `Overall Probability: ${data.AP.confidence}%`;
+                    }
+                    
+                    // Process Lateral results if available
+                    if (data.LAT) {
+                        document.getElementById('latResultBox').style.display = 'block';
+                        document.getElementById('latConfidenceValue').textContent = `${data.LAT.confidence}%`;
+                        document.getElementById('latConfidenceFill').style.width = `${data.LAT.confidence}%`;
+                        
+                        if (data.AP && data.LAT) {
+                            const combinedConf = Math.round((data.AP.confidence + data.LAT.confidence) / 2);
+                            const finalGender = data.AP.gender === data.LAT.gender ? 
+                                            data.AP.gender : 
+                                            (data.AP.confidence > data.LAT.confidence ? data.AP.gender : data.LAT.gender);
+                            
+                            document.getElementById('overallGender').textContent = finalGender;
+                            document.getElementById('overallConfidence').textContent = `Overall Probability: ${combinedConf}%`;
+                        } else if (!data.AP) {
+                            document.getElementById('overallGender').textContent = data.LAT.gender;
+                            document.getElementById('overallConfidence').textContent = `Overall Probability: ${data.LAT.confidence}%`;
+                        }
+                    }
+                } else {
+                    showError("Analysis Failed", data.error || "Unknown error occurred during analysis");
+                    document.getElementById('analyzeBtn').style.display = 'inline-block';
+                }
+            } catch (err) {
+                console.error("Analysis error:", err);
+                showError("Error", "Please upload the specific type of radiological images and skeletal regions.");
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('analyzeBtn').style.display = 'inline-block';
+            }
+        }
+
+        // Event listeners
+        document.getElementById('analyzeBtn').addEventListener('click', runAnalysis);
+        document.getElementById('analyzeAgainBtn').addEventListener('click', runAnalysis);
+        document.getElementById('uploadNewBtn').addEventListener('click', () => {
+            apFile = latFile1 = latFile2 = null;
+            document.getElementById('fileInputAP').value = '';
+            document.getElementById('fileInputLAT1').value = '';
+            document.getElementById('fileInputLAT2').value = '';
+            document.getElementById('previewAP').innerHTML = '';
+            document.getElementById('previewLAT').innerHTML = '';
+            document.getElementById('removeAPBtn').style.display = 'none';
+            document.getElementById('removeLATBtn').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('globalActions').style.display = 'none';
+            document.getElementById('analyzeBtn').style.display = 'inline-block';
+            hideError();
+        });
+
+        // Hide error when clicking anywhere outside
+        document.addEventListener('click', function(e) {
+            if (!document.getElementById('errorDisplay').contains(e.target)) {
+                hideError();
+            }
+        });
+    </script>
+</body>
+</html>
